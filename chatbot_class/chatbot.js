@@ -14,8 +14,8 @@ class Chatbot {
         this.loadingMsg = option.loadingMsg ? option.loadingMsg : "답변을 준비중입니다";
         this.loadingInteravl;
 
-        this.commonEndpoint = "https://port-0-chatbot-m46pr29m610fcc1d.sel4.cloudtype.app"
-        this.chatbotEndpoint = this.commonEndpoint + "/sendMsg";
+        this.commonEndpoint = window.endpoint;
+        this.chatbotEndpoint = this.commonEndpoint + "/chatbot";
         this.configEndpoint = this.commonEndpoint + "/getConfig";
         
         this.init();

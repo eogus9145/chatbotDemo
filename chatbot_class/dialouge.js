@@ -2,6 +2,10 @@ class Dialogue {
     constructor(option) {
         this.target = option.target;
         this.currentCategoryIdx = 0;
+
+        this.commonEndpoint = window.opener.endpoint;
+        this.getDialogueEndpoint = this.commonEndpoint + "/getDialogue";
+        this.getCallbackEndpoint = this.commonEndpoint + "/getCallback";
     }
 
     async init() {
@@ -15,11 +19,11 @@ class Dialogue {
     }
 
     async setCategory () {
-        let dialogueRes = await fetch("/getDialogue");
+        let dialogueRes = await fetch(this.getDialogueEndpoint);
         let dialogueJson = await dialogueRes.json();
         this.dialogue = dialogueJson.dialogue;
 
-        let callbackRes = await fetch("/getCallback");
+        let callbackRes = await fetch(this.getCallbackEndpoint);
         let callbackJson = await callbackRes.json();
         this.callbackMapper = callbackJson.callbackMapper;
 
@@ -104,7 +108,7 @@ class Dialogue {
         mod.textContent = "수정";
         mod.addEventListener("click", async (e) => {
             if(confirm("수정 하시겠습니까?")) {
-                let response = await fetch("/modDialogue", {
+                let response = await fetch(this.commonEndpoint + "/modDialogue", {
                     method: "POST",
                     body: JSON.stringify({callbackIdx: this.currentCategoryIdx, idx: i, q: qInput.value}),
                     headers: {"Content-Type":"application/json"}
@@ -132,7 +136,7 @@ class Dialogue {
         del.textContent = "삭제";
         del.addEventListener("click", async (e) => {
             if(confirm("삭제 하시겠습니까?")) {
-                let response = await fetch("/delDialogue", {
+                let response = await fetch(this.commonEndpoint + "/delDialogue", {
                     method: "POST",
                     body: JSON.stringify({callbackIdx: this.currentCategoryIdx, idx: i}),
                     headers: {"Content-Type":"application/json"}
@@ -219,7 +223,7 @@ class Dialogue {
                 alert("예상 질문을 입력해 주세요");
                 return;
             } else {
-                let response = await fetch("/addDialogue", {
+                let response = await fetch(this.commonEndpoint + "/addDialogue", {
                     method: "POST",
                     body: JSON.stringify({callbackIdx: this.currentCategoryIdx, q : q}),
                     headers: {"Content-Type":"application/json"}

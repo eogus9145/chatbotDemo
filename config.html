@@ -107,8 +107,11 @@
     </div>
 
     <script>
+        let commonEndpoint = window.opener.endpoint;
+        let getConfigEndpoint = commonEndpoint + "/getConfig";
+        let setConfigEndpoint = commonEndpoint + "/setConfig";
         const getConfig = async () => {
-            let response = await fetch("https://port-0-chatbot-m46pr29m610fcc1d.sel4.cloudtype.app/getConfig");
+            let response = await fetch(getConfigEndpoint);
             let resObj = await response.json();
             if(resObj.cd !== '0000') {
                 alert(resObj.msg);
@@ -149,7 +152,7 @@
                 responseArea : document.querySelector("input[name='textGenerate']:checked").value,
                 dataSave : document.querySelector("input[name='dataSave']:checked").value,
             }
-            let response = await fetch("https://port-0-chatbot-m46pr29m610fcc1d.sel4.cloudtype.app/setConfig", {
+            let response = await fetch(setConfigEndpoint, {
                 method: "POST",
                 body: JSON.stringify(param),
                 headers: {"Content-Type":"application/json"}
