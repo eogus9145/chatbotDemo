@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>챗봇 설정</title>
+    <link href="./config.css" rel="stylesheet"/>
+</head>
+<body>
+    <div id="config">
+        <div class="title">
+            챗봇 설정
+        </div>
+        <div class="content">
+            <table class="board">
+                <tbody>
+
+                    <tr>
+                        <th>
+                            연결 메시지
+                        </th>
+                        <td>
+                            <div class="labelDiv">
+                                <label for="firstMsg" class="w100p">
+                                    <textarea id="firstMsg" class="w100p" rows="4" spellcheck="false"></textarea>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            사용자입력 제한
+                        </th>
+                        <td>
+                            <div class="labelDiv">
+                                <label for="inputByte">
+                                    <span class="labelSpan">한번에</span>
+                                    <input type="text" id="inputByte" class="configInput" spellcheck="false">
+                                    <span class="labelSpan">글자까지 입력 가능</span>
+                                </label>
+                            </div>
+                            <div class="labelDiv">
+                                <label for="inputCount">
+                                    <span class="labelSpan">하루에</span>
+                                    <input type="text" id="inputCount" class="configInput" spellcheck="false">
+                                    <span class="labelSpan">번까지 입력 가능&nbsp;&nbsp;&nbsp;</span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            응답범위
+                        </th>
+                        <td>
+                            <div class="labelDiv">
+                                <label for="textGenerateOn">
+                                    <input type="radio" id="textGenerateOn" name="textGenerate" value="0">
+                                    사전 응답
+                                </label>
+                                <label for="textGenerateOff">
+                                    <input type="radio" id="textGenerateOff" name="textGenerate" value="1">
+                                    사전 응답 + AI생성 응답
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            질문데이터 수집
+                        </th>
+                        <td>
+                            <div class="labelDiv">
+                                <label for="dataSave0">
+                                    <input type="radio" id="dataSave0" name="dataSave" value="0">
+                                    수집 안함
+                                </label>
+                                <label for="dataSave1">
+                                    <input type="radio" id="dataSave1" name="dataSave" value="1">
+                                    미응답만 수집
+                                </label>
+                                <label for="dataSave2">
+                                    <input type="radio" id="dataSave2" name="dataSave" value="2">
+                                    전체 수집
+                                </label>
+                            </div>
+                            <div class="addInfo">
+                                AI생성 응답은 미응답으로 인식합니다. 
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="saveAll">
+                <button id="saveAllBtn">
+                    설정완료
+                </button>
+            </div>
+        </div>
+        <div class="footer">
+            
+        </div>
+    </div>
+
+    <script>
+        const getConfig = async () => {
+            let response = await fetch("https://port-0-chatbot-m46pr29m610fcc1d.sel4.cloudtype.app/getConfig");
+            let resObj = await response.json();
+            if(resObj.cd !== '0000') {
+                alert(resObj.msg);
+                return;
+            }
+            let config = resObj.config;
+            console.log("config : ", config);
+            let firstMsg = document.querySelector("#firstMsg");
+            firstMsg.value = config.firstMsg;
+            let inputByte = document.querySelector("#inputByte");
+            inputByte.value = config.onceLimit;
+            let inputCount = document.querySelector("#inputCount");
+            inputCount.value = config.dayLimit;
+            let responseAreas = document.querySelectorAll("input[name='textGenerate']");
+            responseAreas.forEach((item, idx)=>{
+                if(item.value == config.responseArea) {
+                    item.checked = true;
+                } else {
+                    item.checked = false;
+                }
+            });
+            let dataSaves = document.querySelectorAll("input[name='dataSave']");
+            dataSaves.forEach((item, idx)=>{
+                if(item.value == config.dataSave) {
+                    item.checked = true;
+                } else {
+                    item.checked = false;
+                }
+            });
+        }
+        getConfig();
+
+        document.querySelector("#saveAllBtn").addEventListener("click", async (e) => {
+            let param = {
+                firstMsg : document.querySelector("#firstMsg").value,
+                onceLimit : document.querySelector("#inputByte").value,
+                dayLimit : document.querySelector("#inputCount").value,
+                responseArea : document.querySelector("input[name='textGenerate']:checked").value,
+                dataSave : document.querySelector("input[name='dataSave']:checked").value,
+            }
+            let response = await fetch("https://port-0-chatbot-m46pr29m610fcc1d.sel4.cloudtype.app/setConfig", {
+                method: "POST",
+                body: JSON.stringify(param),
+                headers: {"Content-Type":"application/json"}
+            });
+            let result = await response.json();
+            alert(result.msg);
+            if(result.cd == '0000') {
+                if(window.opener) {
+                    await window.opener.chatbot.setConfig();
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

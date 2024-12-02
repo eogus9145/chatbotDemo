@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family:'Noto Sans KR', 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+body, html {
+    width:100%;
+    height:100%;
+}
+
+body {
+    background-color: #f0f0f0;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: #404040;
+    color: #fff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.title {
+    width: 100%;
+    height: 70px;
+    font-weight: 600;
+    font-size: 2rem;
+    border-bottom: 1px dotted #aaa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.content {
+    width: 100%;
+    margin-top: 1rem;
+    flex-grow: 1;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+#chatbotContainer {
+    width: 600px;
+    height: 100%;
+}
+
+#info {
+    flex-grow: 1;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu {
+    width: fit-content;
+    height: 50px;
+    border: 1px solid #4b4b4b;
+    border-radius: 5px 5px 0 0;
+    border-bottom: none;
+    overflow: hidden;
+    display: flex;
+}
+.menuItem {
+    width: fit-content;
+    height: 100%;
+    padding: 0 1rem;
+    min-width: 100px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.menuItem.active {
+    background-color: #4b4b4b;
+    color: #fff;
+}
+.menuItem + .menuItem {
+    border-left: 1px solid #4b4b4b;
+}
+
+.infoContent {
+    width: 100%;
+    flex-grow: 1;
+    border: 1px solid #4b4b4b;
+    border-radius: 0 0 5px 5px;
+    background-color: #fff;
+}
+
+.infoContentItem {
+    display: none;
+    padding: 1rem;
+}
+
+.infoContentItem.active {
+    display: block;
+}

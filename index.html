@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>챗봇 테스트</title>
+    <link href="./index.css" rel="stylesheet"/>
+    <script src="./chatbot_class/chatbot.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="title">
+            <span>챗봇 데모</span>
+            <div>
+                <button id="dialogue">
+                    질문사전
+                </button>
+                <button id="chatbotConfig">
+                    챗봇설정
+                </button>
+            </div>
+        </div>
+        <div class="content">
+            <div id="chatbotContainer">
+                <div id="chatbot"></div>
+            </div>
+            <div id="info">
+                <div class="menu">
+                    <div class="menuItem active" data-menu_idx="0">기본 정보</div>
+                    <div class="menuItem" data-menu_idx="1">동작 원리</div>
+                    <div class="menuItem" data-menu_idx="2">사용 설명</div>
+                </div>
+                <div class="infoContent">
+                    <div class="infoContentItem active" id="info0">
+                        기본정보
+                    </div>
+                    <div class="infoContentItem" id="info1">
+                        동작원리
+                    </div>
+                    <div class="infoContentItem" id="info2">
+                        사용설명
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.chatbot = new Chatbot("#chatbot", {
+            width: "100%",
+            height: "100%"
+        });
+
+        let dialoguePop;
+        document.querySelector("#dialogue").addEventListener("click", (e) => {
+            if(dialoguePop && !dialoguePop.closed) {
+                dialoguePop.focus();
+                return;
+            }
+            dialoguePop = window.open("./dialogue.html", "_blank", "width=600, height=900, top=0, right=0");
+        });
+
+        let configPop;
+        document.querySelector("#chatbotConfig").addEventListener("click", (e) => {
+            if(configPop && !configPop.closed) {
+                configPop.focus();
+                return;
+            }
+            configPop = window.open("./config.html", "_blank", "width=600, height=600");
+        });
+
+        let menus = document.querySelectorAll(".menuItem");
+        menus.forEach((v,i) => {
+            v.addEventListener("click", (e) => {
+
+                menus.forEach(v => v.classList.remove("active"));
+                v.classList.add("active");
+
+                let targetIdx = e.target.getAttribute("data-menu_idx");
+                let contents = document.querySelectorAll(".infoContentItem");
+                contents.forEach((v)=>{
+                    v.classList.remove("active");
+                    if(v.id == ('info' + targetIdx)) v.classList.add("active");
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>
